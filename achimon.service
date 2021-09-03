@@ -1,5 +1,6 @@
 [Unit]
 Description=Achi Monitoring Service
+After=network.target
 
 [Install]
 WantedBy=multi-user.target
