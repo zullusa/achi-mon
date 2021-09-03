@@ -1,0 +1,10 @@
+[Unit]
+Description=Achi Monitoring Service
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=simple
+Restart=always
+
