@@ -26,7 +26,7 @@ if __name__ == "__main__":
     settings = Settings()
     paths = settings.get_settings()["plots.paths"]
     interval = float(settings.get_settings()["plots.interval"] if settings.get_settings()["plots.interval"] else 60)
-    info = "Total plots count : {0}\nTotal plots size: {2:.3f} TiB\nSummary:\n{1}"
+    info = "Total count: {0} plot(s)\nTotal plots size: {2:.3f} TiB\nSummary:\n{1}"
     if len(paths) == 0:
         exit(234)
 
