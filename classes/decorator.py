@@ -50,8 +50,8 @@ class Decorator:
         if match:
             for m in match:
                 if m not in already:
+                    txt = txt.replace(m, "</pre><strong>{0}</strong><pre>".format(m))
                     already.append(m)
-                    txt = txt.replace(m, '</pre><strong> ' + m + ' </strong><pre>')
         self.formatted_text = '<pre>' + txt + '</pre>'
 
     def __make_numbers(self):
@@ -61,6 +61,6 @@ class Decorator:
         if match:
             for m in match:
                 if m not in already:
+                    txt = txt.replace(m, " <strong>{0}</strong> ".format(m))
                     already.append(m)
-                    txt = txt.replace(m, '<strong> ' + m + ' </strong>')
         self.formatted_text = txt

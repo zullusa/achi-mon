@@ -14,30 +14,34 @@ def send_msg(msg):
 
 def count_plots(path):
     count = 0
+    size = 0
     for name in os.listdir(path):
         if os.path.isfile(os.path.join(path, name)) and name.endswith(".plot"):
             count += 1
-    return count
+            size += os.path.getsize(os.path.join(path, name))
+    return count, size
 
 
 if __name__ == "__main__":
     settings = Settings()
     paths = settings.get_settings()["plots.paths"]
     interval = float(settings.get_settings()["plots.interval"] if settings.get_settings()["plots.interval"] else 60)
-    info = "Total file count {0} :\n{1}"
+    info = "Total plots count : {0}\nTotal plots size: {2:.3f} TiB\nSummary:\n{1}"
     if len(paths) == 0:
         exit(234)
 
     try:
         while True:
-            total_sum = 0
-            txt = "  - {0} - {1} plot(s)\n"
+            total_count = 0
+            total_size = 0
+            txt = " - {0} - {1} plot(s) ( {2:.3f} GiB )\n"
             total = ""
             for plots_path in paths:
-                val = count_plots(plots_path)
-                total_sum += val
-                total += txt.format(plots_path, val)
-            send_msg(info.format(total_sum, total))
+                val, size = count_plots(plots_path)
+                total_count += val
+                total_size += size
+                total += txt.format(plots_path, val, size / (1024 ** 3))
+            send_msg(info.format(total_count, total, total_size / (1024 ** 4)))
             time.sleep(60 * interval)
     finally:
         pass
