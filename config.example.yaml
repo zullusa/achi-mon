@@ -17,9 +17,12 @@ telebot:
     - '^Copy to.*finished.*$'
     - '^Test.*'
 wallet:
+  command: "/opt/achi-blockchain/get_wallet_info.sh"
   fingerprints:
     - '3545389941'
 plots:
   interval: 150 #minutes
   paths:
     - '/mnt/hdd1'
+logs:
+  logfile: "/var/log/achi/log.log"
