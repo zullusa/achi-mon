@@ -1,0 +1,25 @@
+server:
+  url: "https://achi.gimro.ru"
+  log_post_uri: "/log/add-message"
+  api_key: "get_own_api_key_from_achicoin@bk.ru"
+telebot:
+  api-key: "123156498:AAE7tBBemz4gkyPUIOhohguxWJ35ji4_Il61Ow"
+  channel: "@<YourChannelName>"
+  filters:
+    - '^Phase \d+ took.*$'
+    - '^Crafting plot.*$'
+    - '^Number of Threads.*$'
+    - '^Plot Name:.*$'
+    - '^Working Directory:.*$'
+    - '^Working Directory 2:.*$'
+    - '^Total plot creation time was.*$'
+    - '^Started copy to.*$'
+    - '^Copy to.*finished.*$'
+    - '^Test.*'
+wallet:
+  fingerprints:
+    - '3545389941'
+plots:
+  interval: 150 #minutes
+  paths:
+    - '/mnt/hdd1'
