@@ -17,6 +17,7 @@ telebot:
     - '^Copy to.*finished.*$'
     - '^Test.*'
 wallet:
+  interval: 20
   command: "/opt/achi-blockchain/get_wallet_info.sh"
   fingerprints:
     - '3545389941'

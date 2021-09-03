@@ -89,6 +89,7 @@ class WalletPollingThread(threading.Thread):
 
     def run(self) -> None:
         fingerprints = self.settings.get_settings()["wallet.fingerprints"]
+        interval = self.settings.get_settings()["wallet.interval"]
         values = {}
         for fingerprint in fingerprints:
             wallet_path = "./wallet_" + str(fingerprint) + ".val"
@@ -101,7 +102,7 @@ class WalletPollingThread(threading.Thread):
                     if not values[fingerprint] == val:
                         values[fingerprint] = val
                         write_value_to_file(wallet_path, val)
-                time.sleep(10)
+                time.sleep(60 * interval)
         finally:
             pass
 
