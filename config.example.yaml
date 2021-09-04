@@ -7,13 +7,13 @@ telebot:
   channel: "@<YourChannelName>"
   filters:
     - '^Phase \d+ took.*$'
+    - '^Total plot creation time was.*$'
+    - '^Started copy to.*$'
     - '^Crafting plot.*$'
     - '^Number of Threads.*$'
     - '^Plot Name:.*$'
     - '^Working Directory:.*$'
     - '^Working Directory 2:.*$'
-    - '^Total plot creation time was.*$'
-    - '^Started copy to.*$'
     - '^Copy to.*finished.*$'
     - '^Test.*'
 wallet:
