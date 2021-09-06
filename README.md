@@ -10,7 +10,6 @@ pip install -r requirements.txt
 1. Create file get_wallet_info.sh in <path_to>/achi-blockchain/
 ```bash
 #!/usr/bin/bash
-
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 cd "$DIR"
 . ./activate

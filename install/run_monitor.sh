@@ -1,3 +1,3 @@
 #!/usr/bin/bash
 
-. ../activate && python ../main.py
+. ./activate && python ./main.py
