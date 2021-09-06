@@ -3,6 +3,7 @@
 0. Preinstall
 ```bash
 python3 -m venv venv
+. activate
 pip install -r requirements.txt
 ```
 
