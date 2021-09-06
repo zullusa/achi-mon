@@ -14,7 +14,7 @@ class Processor:
 
     def process(self, msg):
         print(datetime.datetime.now(), ">\n", msg)
-        telegram_msg = self.filter.apply(msg, "telebot.filters")
+        telegram_msg = self.filter.apply(msg, "logs.filters")
         if telegram_msg:
             self.telebot.send(telegram_msg.strip())
         # self.poster.post(msg)

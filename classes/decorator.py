@@ -8,7 +8,7 @@ class Decorator:
     def __init__(self):
         self.text = ''
         self.formatted_text = ''
-        self.emoji = ''
+        self.tags = ''
         self.need_mark_numbers = False
         self.need_pre = False
 
@@ -21,8 +21,8 @@ class Decorator:
         self.need_mark_numbers = True
         return self
 
-    def pre_emoji(self, emoji: str):
-        self.emoji = emoji
+    def pre_tags(self, tags: str):
+        self.tags = tags
         return self
 
     def embrace_pre(self):
@@ -39,8 +39,8 @@ class Decorator:
             self.__make_numbers()
         else:
             pass
-        if self.emoji:
-            self.formatted_text = self.emoji + ' ' + self.formatted_text
+        if self.tags:
+            self.formatted_text = self.tags + "\n" + self.formatted_text
         return self.formatted_text
 
     def __make_numbers_with_pre(self):

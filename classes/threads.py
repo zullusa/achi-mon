@@ -48,7 +48,7 @@ class PlotsPollingThread(threading.Thread):
 
     def __init__(self, settings: Settings):
         self.settings = settings
-        self.decorator = Decorator().pre_emoji(u'\U0001F4E6').embrace_pre().mark_numbers()
+        self.decorator = Decorator().pre_tags("#plots").embrace_pre().mark_numbers()
         self.telebot = Telebot(self.settings, self.decorator)
         super().__init__()
 
@@ -56,7 +56,7 @@ class PlotsPollingThread(threading.Thread):
         paths = self.settings.get_settings()["plots.paths"]
         interval = float(self.settings.get_settings()["plots.interval"]
                          if self.settings.get_settings()["plots.interval"] else 60)
-        info = "Total count: {0} plot(s)\nTotal plots size: {2:.3f} TiB\nSummary:\n{1}"
+        info = u'\U0001F4E6' + " Total count: {0} plot(s)\nTotal plots size: {2:.3f} TiB\nSummary:\n{1}"
         try:
             while True:
                 total_count = 0
@@ -83,7 +83,7 @@ class PlotsPollingThread(threading.Thread):
 class WalletPollingThread(threading.Thread):
     def __init__(self, settings: Settings):
         self.settings = settings
-        self.decorator = Decorator().pre_emoji(u'\U0001F4B0').embrace_pre().mark_numbers()
+        self.decorator = Decorator().pre_tags("#wallet").embrace_pre().mark_numbers()
         self.telebot = Telebot(self.settings, self.decorator)
         super().__init__()
 
@@ -115,5 +115,5 @@ class WalletPollingThread(threading.Thread):
             new_val = float(match[0])
             if not value == new_val:
                 print(output)
-                self.telebot.send(output)
+                self.telebot.send(u'\U0001F4B0' + ' ' + output)
         return new_val

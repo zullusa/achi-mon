@@ -2,6 +2,8 @@ venv
 test
 /config.yaml
 .idea
+/install/start_monitor.sh
+/install/wallet_*.val
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -13,5 +13,5 @@ class Filter:
         for pattern in patterns:
             match = re.search(pattern, msg, flags=re.MULTILINE)
             if match:
-                result += match[0] + "\n"
+                result += u'\U0001F40C' + ' ' + match[0] + "\n"
         return result

@@ -1,21 +1,6 @@
-server:
-  url: "https://achi.gimro.ru"
-  log_post_uri: "/log/add-message"
-  api_key: "get_own_api_key_from_achicoin@bk.ru"
 telebot:
   api-key: "123156498:AAE7tBBemz4gkyPUIOhohguxWJ35ji4_Il61Ow"
   channel: "@<YourChannelName>"
-  filters:
-    - '^Phase \d+ took.*$'
-    - '^Total plot creation time was.*$'
-    - '^Started copy to.*$'
-    - '^Crafting plot.*$'
-    - '^Number of Threads.*$'
-    - '^Plot Name:.*$'
-    - '^Working Directory:.*$'
-    - '^Working Directory 2:.*$'
-    - '^Copy to.*finished.*$'
-    - '^Test.*'
 wallet:
   interval: 20
   command: "/opt/achi-blockchain/get_wallet_info.sh"
@@ -27,3 +12,14 @@ plots:
     - '/mnt/hdd1'
 logs:
   logfile: "/var/log/achi/log.log"
+  filters:
+    - '^Phase \d+ took.*$'
+    - '^Total plot creation time was.*$'
+    - '^Started copy to.*$'
+    - '^Crafting plot.*$'
+    - '^Number of Threads.*$'
+    - '^Plot Name:.*$'
+    - '^Working Directory:.*$'
+    - '^Working Directory 2:.*$'
+    - '^Copy to.*finished.*$'
+    - '^Test.*'
