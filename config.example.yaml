@@ -25,3 +25,5 @@ logs:
       - '^Copy to.*finished.*$'
     errors:
       - '^Killed$'
+      - '^.*(E|e)rror.*$'
+      - '^.*(E|e)xception.*$'
