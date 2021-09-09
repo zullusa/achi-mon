@@ -10,13 +10,16 @@ class Telebot:
         self.settings = settings.get_settings()
         self.decorator = decorator
 
-    def send(self, text: str):
+    def send(self, text: str, is_error: bool = False):
         token = self.settings["telebot.api-key"]
         url = "https://api.telegram.org/bot"
         channel_id = self.settings["telebot.channel"]
         url += token
         method = url + "/sendMessage"
-        msg = self.decorator.format_text(text)
+        if is_error:
+            msg = self.decorator.format_text(text, supply_tags='#error')
+        else:
+            msg = self.decorator.format_text(text)
 
         r = requests.post(method, data={
             "chat_id": channel_id,
@@ -28,6 +31,3 @@ class Telebot:
         if r.status_code != 200:
             print(r.text)
             print(msg)
-
-# if __name__ == '__main__':
-#     send_telegram("hello world!")

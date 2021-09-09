@@ -14,7 +14,9 @@ class Processor:
 
     def process(self, msg):
         print(datetime.datetime.now(), ">\n", msg)
-        telegram_msg = self.filter.apply(msg, "logs.filters")
+        telegram_msg = self.filter.apply(msg, "logs.filters.messages", "msg")
+        telegram_err = self.filter.apply(msg, "logs.filters.errors", "error")
         if telegram_msg:
             self.telebot.send(telegram_msg.strip())
-        # self.poster.post(msg)
+        if telegram_err:
+            self.telebot.send(telegram_err.strip(), is_error=True)

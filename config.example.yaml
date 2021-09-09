@@ -2,7 +2,7 @@ telebot:
   api-key: "123156498:AAE7tBBemz4gkyPUIOhohguxWJ35ji4_Il61Ow"
   channel: "@<YourChannelName>"
 wallet:
-  interval: 20
+  interval: 20 #minutes
   command: "/opt/achi-blockchain/get_wallet_info.sh"
   fingerprints:
     - '3545389941'
@@ -13,13 +13,15 @@ plots:
 logs:
   logfile: "/var/log/achi/log.log"
   filters:
-    - '^Phase \d+ took.*$'
-    - '^Total plot creation time was.*$'
-    - '^Started copy to.*$'
-    - '^Crafting plot.*$'
-    - '^Number of Threads.*$'
-    - '^Plot Name:.*$'
-    - '^Working Directory:.*$'
-    - '^Working Directory 2:.*$'
-    - '^Copy to.*finished.*$'
-    - '^Test.*'
+    messages:
+      - '^Phase \d+ took.*$'
+      - '^Total plot creation time was.*$'
+      - '^Started copy to.*$'
+      - '^Crafting plot.*$'
+      - '^Number of Threads.*$'
+      - '^Plot Name:.*$'
+      - '^Working Directory:.*$'
+      - '^Working Directory 2:.*$'
+      - '^Copy to.*finished.*$'
+    errors:
+      - '^Killed$'

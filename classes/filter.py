@@ -7,11 +7,11 @@ class Filter:
     def __init__(self, settings: Settings):
         self.settings = settings.get_settings()
 
-    def apply(self, msg, filter_name):
+    def apply(self, msg, filter_name, msg_type):
         patterns = self.settings[filter_name]
         result = ""
         for pattern in patterns:
             match = re.search(pattern, msg, flags=re.MULTILINE)
             if match:
-                result += u'\U0001F40C' + ' ' + match[0] + "\n"
+                result += '${0}$ '.format(msg_type) + match[0] + "\n"
         return result

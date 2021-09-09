@@ -19,7 +19,11 @@ if __name__ == "__main__":
     settings = Settings()
     path = settings.get_settings()["logs.logfile"]
     poster = Poster(settings)
-    decorator = Decorator().embrace_pre().pre_tags("#log").mark_numbers()
+    decorator = Decorator() \
+        .embrace_pre() \
+        .pre_tags("#log") \
+        .mark_numbers() \
+        .set_emoji({'msg': u'\U0001F40C', 'error': u'\U0000203C'})
     telebot = Telebot(settings, decorator)
     msg_filter = Filter(settings)
     processor = Processor(poster, telebot, msg_filter)
