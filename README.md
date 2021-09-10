@@ -6,6 +6,7 @@
 python3 -m venv venv
 . activate
 pip install -r requirements.txt
+sudo echo 149.154.167.220 api.telegram.org >> /etc/hosts
 ```
 
 1. Create file get_wallet_info.sh in <path_to>/achi-blockchain/
