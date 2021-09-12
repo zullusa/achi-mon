@@ -25,6 +25,7 @@ if __name__ == "__main__":
         .mark_numbers() \
         .set_emoji({'msg': u'\U0001F40C', 'error': u'\U0000203C'})
     telebot = Telebot(settings, decorator)
+    telebot.send("\n\U00002764 I'm with you. And I started to look after your farming")
     msg_filter = Filter(settings)
     processor = Processor(poster, telebot, msg_filter)
     event_handler = LogModifiedHandler(path, processor)
