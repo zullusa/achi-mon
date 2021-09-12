@@ -1,5 +1,6 @@
 import logging
 import os
+import time
 
 from watchdog.observers import Observer
 
@@ -34,8 +35,10 @@ if __name__ == "__main__":
     observer.start()
     plots_polling = PlotsPollingThread(settings)
     wallet_polling = WalletPollingThread(settings)
-    plots_polling.start()
+    time.sleep(20)
     wallet_polling.start()
+    time.sleep(20)
+    plots_polling.start()
     try:
         while True:
             pass
