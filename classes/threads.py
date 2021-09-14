@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 import threading
@@ -25,7 +26,7 @@ def write_value_to_file(file_path, value):
     try:
         wallet_file.write(str(value))
     except Exception as e:
-        print("Error: {0}".format(e))
+        logging.root.error("Error: {0}".format(e))
     finally:
         wallet_file.close()
 
@@ -38,7 +39,7 @@ def read_value_from_file(wallet_path) -> float:
             file.seek(0)
             value = float(file.read(-1).strip())
         except Exception as err:
-            print("Error: {0}".format(err))
+            logging.root.error("Error: {0}".format(err))
         finally:
             file.close()
     return value
@@ -50,6 +51,7 @@ class PlotsPollingThread(threading.Thread):
         self.settings = settings
         self.decorator = Decorator().pre_tags("#plots").embrace_pre().mark_numbers().set_emoji({"plot": u'\U0001F4E6'})
         self.telebot = Telebot(self.settings, self.decorator)
+        self.logger = logging.root
         super().__init__()
 
     def run(self) -> None:
@@ -85,6 +87,7 @@ class WalletPollingThread(threading.Thread):
         self.settings = settings
         self.decorator = Decorator().pre_tags("#wallet").embrace_pre().mark_numbers().set_emoji({"wallet": u'\U0001F4B0'})
         self.telebot = Telebot(self.settings, self.decorator)
+        self.logger = logging.root
         super().__init__()
 
     def run(self) -> None:
@@ -114,6 +117,6 @@ class WalletPollingThread(threading.Thread):
         if match:
             new_val = float(match[0])
             if not value == new_val:
-                print(output)
+                self.logger.info(output)
                 self.telebot.send('$wallet$ {0}'.format(output))
         return new_val

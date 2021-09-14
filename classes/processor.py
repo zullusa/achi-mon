@@ -1,4 +1,4 @@
-import datetime
+import logging
 
 from classes.filter import Filter
 from classes.poster import Poster
@@ -11,9 +11,10 @@ class Processor:
         self.poster = poster
         self.telebot = telebot
         self.filter = filter
+        self.logger = logging.root
 
     def process(self, msg):
-        print(datetime.datetime.now(), ">\n", msg)
+        self.logger.info("\n{0}".format(msg))
         telegram_msg = self.filter.apply(msg, "logs.filters.messages", "msg")
         telegram_err = self.filter.apply(msg, "logs.filters.errors", "error")
         if telegram_msg:
