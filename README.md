@@ -3,6 +3,8 @@
 0. Preinstall
 
 ```bash
+git clone https://github.com/zullusa/achi-mon.git
+cd achi-mon
 python3 -m venv venv
 . activate
 pip install -r requirements.txt
