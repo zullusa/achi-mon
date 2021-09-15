@@ -26,6 +26,8 @@ if __name__ == "__main__":
     wallet_polling.start()
     time.sleep(17)
     plots_polling.start()
+    time.sleep(21)
+    farm_polling.start()
     try:
         while True:
             pass
@@ -36,3 +38,5 @@ if __name__ == "__main__":
         plots_polling.join()
         wallet_polling.stop()
         wallet_polling.join()
+        farm_polling.stop()
+        farm_polling.join()
