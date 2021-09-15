@@ -60,8 +60,8 @@ class PlotsPollingThread(threading.Thread):
 
     def run(self) -> None:
         paths = self.settings().get("harvester.plot_directories") or self.settings().get("plots.paths")
-        interval = float(self.settings.get_settings()["plots.interval"]
-                         if self.settings.get_settings()["plots.interval"] else 60)
+        interval = float(self.settings().get("plots.interval")
+                         if self.settings().get("plots.interval") else 60)
         info = "$plot$ Total count: {0} plot(s)\nTotal plots size: {2:.3f} TiB\nSummary:\n{1}"
         try:
             while True:
@@ -96,8 +96,8 @@ class WalletPollingThread(threading.Thread):
         super().__init__()
 
     def run(self) -> None:
-        fingerprints = self.settings.get_settings()["wallet.fingerprints"]
-        interval = self.settings.get_settings()["wallet.interval"]
+        fingerprints = self.settings().get("wallet.fingerprints")
+        interval = self.settings().get("wallet.interval")
         values = {}
         for fingerprint in fingerprints:
             wallet_path = "./wallet_" + str(fingerprint) + ".val"
@@ -115,7 +115,7 @@ class WalletPollingThread(threading.Thread):
             pass
 
     def send_wallet_info(self, fingerprint, value) -> float:
-        cmd = Command(self.settings.get_settings()["wallet.command"])
+        cmd = Command(self.settings().get("wallet.command"))
         output = cmd(fingerprint).stdout.decode(encoding='utf-8')
         match = re.findall(r'-Total Balance:\s?(\d+\.\d+)', output, re.MULTILINE)
         new_val = value
@@ -134,10 +134,9 @@ class LogPollingThread(threading.Thread):
 
     def __init__(self, settings: Settings):
         self.settings = settings
-        self.run_observer()
         super().__init__()
 
-    def run_observer(self):
+    def run(self):
         path = self.settings().get("logs.logfile")
         poster = Poster(self.settings)
         decorator = Decorator() \
@@ -174,7 +173,7 @@ class FarmPollingThread(threading.Thread):
         super().__init__()
 
     def run(self) -> None:
-        interval = self.settings.get_settings()["farm.summary.interval"]
+        interval = self.settings().get("farm.summary.interval")
         try:
             while True:
                 self.send_farm_summary()
