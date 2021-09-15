@@ -13,9 +13,9 @@ if __name__ == "__main__":
                         datefmt='%Y-%m-%d %H:%M:%S')
     settings = Settings()
     settings = Settings(settings().get("achi.config.path")) if settings().get("achi.config.path") else settings
-    decorator = Decorator().pre_tags("#hi")
+    decorator = Decorator().pre_tags("#hi").embrace_pre()
     telebot = Telebot(settings, decorator)
-    telebot.send("\U00002764 I'm with you. And I started to look after your farming")
+    telebot.send("\U0001F499 I'm with you. And I started to look after your farming \U0001F482")
 
     log_polling = LogPollingThread(settings)
     farm_polling = FarmPollingThread(settings)
