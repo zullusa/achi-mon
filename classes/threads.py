@@ -5,8 +5,12 @@ import threading
 import time
 
 from sh import Command
+from watchdog.observers import Observer
 
 from classes.decorator import Decorator
+from classes.filter import Filter
+from classes.poster import Poster
+from classes.processor import Processor
 from classes.settings import Settings
 from classes.telegram import Telebot
 
@@ -55,7 +59,7 @@ class PlotsPollingThread(threading.Thread):
         super().__init__()
 
     def run(self) -> None:
-        paths = self.settings.get_settings()["plots.paths"]
+        paths = self.settings().get("harvester.plot_directories") or self.settings().get("plots.paths")
         interval = float(self.settings.get_settings()["plots.interval"]
                          if self.settings.get_settings()["plots.interval"] else 60)
         info = "$plot$ Total count: {0} plot(s)\nTotal plots size: {2:.3f} TiB\nSummary:\n{1}"
@@ -85,7 +89,8 @@ class PlotsPollingThread(threading.Thread):
 class WalletPollingThread(threading.Thread):
     def __init__(self, settings: Settings):
         self.settings = settings
-        self.decorator = Decorator().pre_tags("#wallet").embrace_pre().mark_numbers().set_emoji({"wallet": u'\U0001F4B0'})
+        self.decorator = Decorator().pre_tags("#wallet").embrace_pre().mark_numbers().set_emoji(
+            {"wallet": u'\U0001F4B0'})
         self.telebot = Telebot(self.settings, self.decorator)
         self.logger = logging.root
         super().__init__()
@@ -120,3 +125,68 @@ class WalletPollingThread(threading.Thread):
                 self.logger.info(output)
                 self.telebot.send('$wallet$ {0}'.format(output))
         return new_val
+
+    def stop(self):
+        pass
+
+
+class LogPollingThread(threading.Thread):
+
+    def __init__(self, settings: Settings):
+        self.settings = settings
+        self.run_observer()
+        super().__init__()
+
+    def run_observer(self):
+        path = self.settings().get("logs.logfile")
+        poster = Poster(self.settings)
+        decorator = Decorator() \
+            .embrace_pre() \
+            .pre_tags("#log") \
+            .mark_numbers() \
+            .set_emoji({'msg': u'\U0001F40C', 'error': u'\U0000203C'})
+        telebot = Telebot(self.settings, decorator)
+        msg_filter = Filter(self.settings)
+        processor = Processor(poster, telebot, msg_filter)
+        from classes.handler import LogModifiedHandler
+        event_handler = LogModifiedHandler(path, processor)
+        observer = Observer()
+        observer.schedule(event_handler, os.path.split(path)[0])
+        observer.start()
+        try:
+            while True:
+                pass
+        finally:
+            observer.stop()
+            observer.join()
+
+    def stop(self):
+        pass
+
+
+class FarmPollingThread(threading.Thread):
+    def __init__(self, settings: Settings):
+        self.settings = settings
+        self.decorator = Decorator().pre_tags("#farm").embrace_pre().mark_numbers().set_emoji(
+            {"summary": u'\U0001F4CA'})
+        self.telebot = Telebot(self.settings, self.decorator)
+        self.logger = logging.root
+        super().__init__()
+
+    def run(self) -> None:
+        interval = self.settings.get_settings()["farm.summary.interval"]
+        try:
+            while True:
+                self.send_farm_summary()
+                time.sleep(60 * interval)
+        finally:
+            pass
+
+    def send_farm_summary(self):
+        cmd = Command(self.settings().get("farm.summary.command"))
+        output = cmd().stdout.decode(encoding='utf-8')
+        self.logger.info(output)
+        self.telebot.send('$summary$ {0}'.format(output))
+
+    def stop(self):
+        pass

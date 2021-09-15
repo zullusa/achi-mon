@@ -1,12 +1,19 @@
 telebot:
-  api-key: "123156498:AAE7tBBemz4gkyPUIOhohguxWJ35ji4_Il61Ow"
+  api-key: "your_bot_id:token"
   channel: "@<YourChannelName>"
   send_trying_count: 1
+achi:
+  config:
+    path: /home/$USER/.achi/mainnet/config/config.yaml
 wallet:
   interval: 20 #minutes
-  command: "/opt/achi-blockchain/get_wallet_info.sh"
+  command: "path_to/achi-blockchain/get_wallet_info.sh"
   fingerprints:
-    - '3545389941'
+    - '<your wallet fingerprint>'
+farm:
+  summary:
+    command: "/opt/achi-blockchain/get_farm_summary.sh"
+    interval: 22 #minutes
 plots:
   interval: 150 #minutes
   paths:
@@ -28,3 +35,4 @@ logs:
       - '^Killed$'
       - '^.*(E|e)rror.*$'
       - '^.*(E|e)xception.*$'
+      - '^.*(F|f)ail.*$'

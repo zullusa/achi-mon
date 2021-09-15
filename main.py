@@ -1,50 +1,37 @@
 import logging
-import os
 import time
 
-from watchdog.observers import Observer
 
 from classes.decorator import Decorator
-from classes.filter import Filter
-from classes.handler import LogModifiedHandler
-from classes.poster import Poster
-from classes.processor import Processor
 from classes.settings import Settings
 from classes.telegram import Telebot
-from classes.threads import PlotsPollingThread, WalletPollingThread
+from classes.threads import PlotsPollingThread, WalletPollingThread, LogPollingThread, FarmPollingThread
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO,
                         format='%(asctime)s - %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S')
     settings = Settings()
-    path = settings.get_settings()["logs.logfile"]
-    poster = Poster(settings)
-    decorator = Decorator() \
-        .embrace_pre() \
-        .pre_tags("#log") \
-        .mark_numbers() \
-        .set_emoji({'msg': u'\U0001F40C', 'error': u'\U0000203C'})
+    settings = Settings(settings().get("achi.config.path")) if settings().get("achi.config.path") else settings
+    decorator = Decorator().pre_tags("#hi")
     telebot = Telebot(settings, decorator)
-    telebot.send("\U00002764 I'm with you. And I started to look after your farming", )
-    msg_filter = Filter(settings)
-    processor = Processor(poster, telebot, msg_filter)
-    event_handler = LogModifiedHandler(path, processor)
-    observer = Observer()
-    observer.schedule(event_handler, os.path.split(path)[0])
-    observer.start()
+    telebot.send("\U00002764 I'm with you. And I started to look after your farming")
+
+    log_polling = LogPollingThread(settings)
+    log_polling.start()
     plots_polling = PlotsPollingThread(settings)
     wallet_polling = WalletPollingThread(settings)
-    time.sleep(20)
+    farm_polling = FarmPollingThread(settings)
+    time.sleep(13)
     wallet_polling.start()
-    time.sleep(20)
+    time.sleep(17)
     plots_polling.start()
     try:
         while True:
             pass
     finally:
-        observer.stop()
-        observer.join()
+        log_polling.stop()
+        log_polling.join()
         plots_polling.stop()
         plots_polling.join()
         wallet_polling.stop()
