@@ -18,16 +18,17 @@ if __name__ == "__main__":
     telebot.send("\U00002764 I'm with you. And I started to look after your farming")
 
     log_polling = LogPollingThread(settings)
-    log_polling.start()
+    farm_polling = FarmPollingThread(settings)
     plots_polling = PlotsPollingThread(settings)
     wallet_polling = WalletPollingThread(settings)
-    farm_polling = FarmPollingThread(settings)
+
+    log_polling.start()
     time.sleep(13)
-    wallet_polling.start()
+    farm_polling.start()
     time.sleep(17)
     plots_polling.start()
     time.sleep(21)
-    farm_polling.start()
+    wallet_polling.start()
     try:
         while True:
             pass
