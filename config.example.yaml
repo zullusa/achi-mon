@@ -5,7 +5,7 @@ telebot:
 achi:
   config:
     path: /home/$USER/.achi/mainnet/config/config.yaml
-wallet:
+my_wallet:
   interval: 20 #minutes
   command: "path_to/achi-blockchain/get_wallet_info.sh"
   fingerprints:

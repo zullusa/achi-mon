@@ -96,8 +96,8 @@ class WalletPollingThread(threading.Thread):
         super().__init__()
 
     def run(self) -> None:
-        fingerprints = self.settings().get("wallet.fingerprints")
-        interval = self.settings().get("wallet.interval")
+        fingerprints = self.settings().get("my_wallet.fingerprints")
+        interval = self.settings().get("my_wallet.interval")
         values = {}
         for fingerprint in fingerprints:
             wallet_path = "./wallet_" + str(fingerprint) + ".val"
@@ -115,7 +115,7 @@ class WalletPollingThread(threading.Thread):
             pass
 
     def send_wallet_info(self, fingerprint, value) -> float:
-        cmd = Command(self.settings().get("wallet.command"))
+        cmd = Command(self.settings().get("my_wallet.command"))
         output = cmd(fingerprint).stdout.decode(encoding='utf-8')
         match = re.findall(r'-Total Balance:\s?(\d+\.\d+)', output, re.MULTILINE)
         new_val = value
