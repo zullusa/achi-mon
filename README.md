@@ -53,7 +53,7 @@ sudo ./install/02_install_from_root.sh
 
 4. Pro(o)fit!
 
-#FAQ
+# FAQ
 ### How can I donate to you)))
 Send achi to
 `xach1q8uqvd60px7zvhtsdwthq5f3786ahnauxxzqrfzgq6ahntt5xe8s477yy8`
