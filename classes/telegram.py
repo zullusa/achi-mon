@@ -17,7 +17,8 @@ class Telebot:
         self.trying_count = self.trying_count if self.trying_count else 1
 
     def send(self, text: str, is_error: bool = False, trying: int = 0):
-        token = self.settings["telebot.api-key"]
+        token = self.settings.get("telebot.api-key")
+        bot_id = self.settings.get("telebot.bot_id")
         url = "https://api.telegram.org/bot"
         channel_id = self.settings["telebot.channel"]
         url += token
@@ -29,7 +30,7 @@ class Telebot:
         try:
             r = requests.post(method, data={
                 "chat_id": channel_id,
-                "text": msg,
+                "text": ("#{0} ".format(bot_id) if bot_id else "") + msg,
                 "parse_mode": "HTML",
                 "disable_notification": True
             })

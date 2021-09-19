@@ -2,6 +2,7 @@ telebot:
   api-key: "your_bot_id:token"
   channel: "@<YourChannelName>"
   send_trying_count: 1
+  bot_id: "farmer1"
 achi:
   config:
     path: /home/$USER/.achi/mainnet/config/config.yaml
