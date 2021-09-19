@@ -26,26 +26,26 @@ def count_plots(path):
 
 
 def write_value_to_file(file_path, value):
-    wallet_file = open(file_path, 'w')
+    _file = open(file_path, 'w')
     try:
-        wallet_file.write(str(value))
+        _file.write(str(value))
     except Exception as e:
         logging.root.error("Error: {0}".format(e))
     finally:
-        wallet_file.close()
+        _file.close()
 
 
-def read_value_from_file(wallet_path) -> float:
+def read_value_from_file(file_path) -> float:
     value = 0.0
-    if os.path.isfile(wallet_path):
-        file = open(wallet_path, 'r')
+    if os.path.isfile(file_path):
+        _file = open(file_path, 'r')
         try:
-            file.seek(0)
-            value = float(file.read(-1).strip())
+            _file.seek(0)
+            value = float(_file.read(-1).strip())
         except Exception as err:
             logging.root.error("Error: {0}".format(err))
         finally:
-            file.close()
+            _file.close()
     return value
 
 
@@ -63,8 +63,10 @@ class PlotsPollingThread(threading.Thread):
         interval = float(self.settings().get("plots.interval")
                          if self.settings().get("plots.interval") else 60)
         info = "$plot$ Total count: {0} plot(s)\nTotal plots size: {2:.3f} TiB\nSummary:\n{1}"
+
         try:
             while True:
+                count_from_file = read_value_from_file('plot_count.val')
                 total_count = 0
                 total_size = 0
                 txt = " - {0} - {1} plot(s) ( {2:.3f} GiB )\n"
@@ -74,7 +76,9 @@ class PlotsPollingThread(threading.Thread):
                     total_count += val
                     total_size += size
                     total += txt.format(plots_path, val, size / (1024 ** 3))
-                self.__send_msg(info.format(total_count, total, total_size / (1024 ** 4)))
+                if total_count != count_from_file:
+                    self.__send_msg(info.format(total_count, total, total_size / (1024 ** 4)))
+                    write_value_to_file('plot_count.val', total_count)
                 time.sleep(60 * interval)
         finally:
             pass

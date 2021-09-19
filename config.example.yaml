@@ -12,12 +12,10 @@ my_wallet:
     - '<your wallet fingerprint>'
 farm:
   summary:
-    command: "/opt/achi-blockchain/get_farm_summary.sh"
+    command: "path_to/achi-blockchain/get_farm_summary.sh"
     interval: 22 #minutes
 plots:
-  interval: 150 #minutes
-  paths:
-    - '/mnt/hdd1'
+  interval: 1 #minutes
 logs:
   logfile: "/var/log/achi/log.log"
   filters:
