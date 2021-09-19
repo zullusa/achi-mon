@@ -62,4 +62,5 @@ cd <path_to>/achi-blockchain
 . activate
 achi wallet send -f <your_fingerprint> -a <how_much> -t xach1q8uqvd60px7zvhtsdwthq5f3786ahnauxxzqrfzgq6ahntt5xe8s477yy8 
 ```
-
+### Where can I find you?
+In [discord](https://discord.gg/DZhBc5pCng) nickname zilog
