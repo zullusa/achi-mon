@@ -3,6 +3,7 @@ telebot:
   channel: "@<YourChannelName>"
   send_trying_count: 1
   bot_id: "farmer1"
+  ding-dong-on: false
 achi:
   config:
     path: /home/$USER/.achi/mainnet/config/config.yaml

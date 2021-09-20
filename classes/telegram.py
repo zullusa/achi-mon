@@ -13,8 +13,8 @@ class Telebot:
         self.settings = settings.get_settings()
         self.decorator = decorator
         self.logger = logging.root
-        self.trying_count = self.settings.get("telebot.send_trying_count")
-        self.trying_count = self.trying_count if self.trying_count else 1
+        self.trying_count = self.settings.get("telebot.send_trying_count", 1)
+        self.din_din_on = self.settings.get("telebot.ding-dong-on", False)
 
     def send(self, text: str, is_error: bool = False, trying: int = 0):
         token = self.settings.get("telebot.api-key")
@@ -32,7 +32,7 @@ class Telebot:
                 "chat_id": channel_id,
                 "text": ("#{0} ".format(bot_id) if bot_id else "") + msg,
                 "parse_mode": "HTML",
-                "disable_notification": True
+                "disable_notification": not self.din_din_on
             })
         except Exception as e:
             self.logger.error(e)
