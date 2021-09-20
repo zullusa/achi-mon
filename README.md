@@ -67,7 +67,7 @@ In [discord](https://discord.gg/DZhBc5pCng) nickname zilog
 
 
 # TODO
-1. dd for bust disk cache
+1. dd for bust disk cache `* * * * * /bin/bash -c 'dd if=/dev/disk/by-uuid/THE-UUID of=/dev/null count=1 skip=$RANDOM'`
 2. ~~supplement information for wallet check `current_value - previous value` "growing"
 and `current_time - previous_time` "expected time"~~
 3. ~~switch off polling in config.yaml~~
