@@ -36,3 +36,12 @@ logs:
       - '^.*(E|e)rror.*$'
       - '^.*(E|e)xception.*$'
       - '^.*(F|f)ail.*$'
+pollings:
+  log:
+    is-on: true
+  farm:
+    is-on: true
+  plots:
+    is-on: true
+  wallet:
+    is-on: true

@@ -109,25 +109,30 @@ class WalletPollingThread(threading.Thread):
         try:
             while True:
                 for fingerprint in fingerprints:
-                    val = self.send_wallet_info(fingerprint, values[fingerprint])
                     wallet_path = "./wallet_" + str(fingerprint) + ".val"
-                    if not values[fingerprint] == val:
+                    val = self.send_wallet_info(fingerprint, values[fingerprint], os.path.getmtime(wallet_path))
+                    if values[fingerprint] != val:
                         values[fingerprint] = val
                         write_value_to_file(wallet_path, val)
                 time.sleep(60 * interval)
         finally:
             pass
 
-    def send_wallet_info(self, fingerprint, value) -> float:
+    def send_wallet_info(self, fingerprint, value, prev_time: float = time.time()) -> float:
         cmd = Command(self.settings().get("my_wallet.command"))
         output = cmd(fingerprint).stdout.decode(encoding='utf-8')
         match = re.findall(r'-Total Balance:\s?(\d+\.\d+)', output, re.MULTILINE)
         new_val = value
         if match:
             new_val = float(match[0])
-            if not value == new_val:
+            if value != new_val:
                 self.logger.info(output)
-                self.telebot.send('$wallet$ {0}'.format(output))
+                growing = "\U0001F331 Growing: + {0:.4f} xach".format((new_val - value)) \
+                    if new_val > value \
+                    else "\U0001F342 Fading: - {0:.4f} xach".format((value - new_val))
+                exp_time = (time.time() - prev_time) / 60
+                self.telebot.send("$wallet$ {0}-----------------\n{1}\n\U0000231B Expected time: {2:.2f} min"
+                                  .format(output, growing, exp_time))
         return new_val
 
     def stop(self):

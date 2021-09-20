@@ -64,3 +64,10 @@ achi wallet send -f <your_fingerprint> -a <how_much> -t xach1q8uqvd60px7zvhtsdwt
 ```
 ### Where can I find you?
 In [discord](https://discord.gg/DZhBc5pCng) nickname zilog
+
+
+# TODO
+1. dd for bust disk cache
+2. ~~supplement information for wallet check `current_value - previous value` "growing"
+and `current_time - previous_time` "expected time"~~
+3. ~~switch off polling in config.yaml~~

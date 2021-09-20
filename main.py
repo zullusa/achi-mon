@@ -16,28 +16,40 @@ if __name__ == "__main__":
     decorator = Decorator().pre_tags("#hi").embrace_pre()
     telebot = Telebot(settings, decorator)
     telebot.send("\U0001F499 I'm with you. And I started to look after your farming \U0001F482")
-
+    log_polling_switcher = settings().get("pollings.log.is-on", True)
+    farm_polling_switcher = settings().get("pollings.farm.is-on", True)
+    plots_polling_switcher = settings().get("pollings.plots.is-on", True)
+    wallet_polling_switcher = settings().get("pollings.wallet.is-on", True)
     log_polling = LogPollingThread(settings)
     farm_polling = FarmPollingThread(settings)
     plots_polling = PlotsPollingThread(settings)
     wallet_polling = WalletPollingThread(settings)
 
-    log_polling.start()
-    time.sleep(13)
-    farm_polling.start()
-    time.sleep(17)
-    plots_polling.start()
-    time.sleep(21)
-    wallet_polling.start()
+    if log_polling_switcher:
+        log_polling.start()
+    if farm_polling_switcher:
+        time.sleep(13)
+        farm_polling.start()
+    if plots_polling_switcher:
+        time.sleep(17)
+        plots_polling.start()
+    if wallet_polling_switcher:
+        time.sleep(21)
+        wallet_polling.start()
+
     try:
         while True:
             pass
     finally:
-        log_polling.stop()
-        log_polling.join()
-        plots_polling.stop()
-        plots_polling.join()
-        wallet_polling.stop()
-        wallet_polling.join()
-        farm_polling.stop()
-        farm_polling.join()
+        if log_polling_switcher:
+            log_polling.stop()
+            log_polling.join()
+        if plots_polling_switcher:
+            plots_polling.stop()
+            plots_polling.join()
+        if wallet_polling_switcher:
+            wallet_polling.stop()
+            wallet_polling.join()
+        if farm_polling_switcher:
+            farm_polling.stop()
+            farm_polling.join()
