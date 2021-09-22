@@ -7,6 +7,7 @@ git clone https://github.com/zullusa/achi-mon.git
 cd achi-mon
 python3 -m venv venv
 . activate
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 echo 149.154.167.220 api.telegram.org | sudo tee -a /etc/hosts
 ```
@@ -30,8 +31,13 @@ cd "$DIR"
 . ./activate
 achi farm summary
 ```
+3. Install certificate, if you want to use Heartbeat. I use Lets'Encrypt certificates. 
+Or you need cabundle.pem from yours certificate form the API Service.
+```
+openssl x509 -in ./certs/cabundle.pem -text >> venv/lib/python<YOUR_VERSION>/site-packages/certifi/cacert.pem
+```
 
-3. Make & Edit config
+4. Make & Edit config
 
 ```bash
 cp config.example.yaml config.yaml
@@ -43,7 +49,7 @@ change
 - $USER - your user name
 - path_to - Path to achi-blockchain directory
 
-3. Install Daemon
+5. Install Daemon
 
 ```bash
 chmod 777 ./install/*.sh
@@ -51,7 +57,7 @@ chmod 777 ./install/*.sh
 sudo ./install/02_install_from_root.sh
 ```
 
-4. Pro(o)fit!
+6. Pro(o)fit!
 
 # FAQ
 ### How can I donate to you)))
@@ -71,3 +77,5 @@ In [discord](https://discord.gg/DZhBc5pCng) nickname zilog
 2. ~~supplement information for wallet check `current_value - previous value` "growing"
 and `current_time - previous_time` "expected time"~~
 3. ~~switch off polling in config.yaml~~
+4. ~~Heartbeat~~
+5. ~~Different notification settings for different pollings~~

@@ -4,6 +4,7 @@ import re
 import threading
 import time
 
+import requests
 from sh import Command
 from watchdog.observers import Observer
 
@@ -84,7 +85,7 @@ class PlotsPollingThread(threading.Thread):
             pass
 
     def __send_msg(self, msg):
-        self.telebot.send(msg)
+        self.telebot.send(msg, ding_dong_on=self.settings().get("pollings.plots.ding-dong-on", False))
 
     def stop(self):
         pass
@@ -132,7 +133,8 @@ class WalletPollingThread(threading.Thread):
                     else "\U0001F342 Fading: - {0:.4f} xach".format((value - new_val))
                 exp_time = (time.time() - prev_time) / 60
                 self.telebot.send("$wallet$ {0}-----------------\n{1}\n\U0000231B Expected time: {2:.2f} min"
-                                  .format(output, growing, exp_time))
+                                  .format(output, growing, exp_time),
+                                  ding_dong_on=self.settings().get("pollings.wallet.ding-dong-on", False))
         return new_val
 
     def stop(self):
@@ -155,7 +157,7 @@ class LogPollingThread(threading.Thread):
             .set_emoji({'msg': u'\U0001F40C', 'error': u'\U0000203C'})
         telebot = Telebot(self.settings, decorator)
         msg_filter = Filter(self.settings)
-        processor = Processor(poster, telebot, msg_filter)
+        processor = Processor(poster, telebot, msg_filter, self.settings)
         from classes.handler import LogModifiedHandler
         event_handler = LogModifiedHandler(path, processor)
         observer = Observer()
@@ -194,7 +196,41 @@ class FarmPollingThread(threading.Thread):
         cmd = Command(self.settings().get("farm.summary.command"))
         output = cmd().stdout.decode(encoding='utf-8')
         self.logger.info(output)
-        self.telebot.send('$summary$ {0}'.format(output))
+        self.telebot.send('$summary$ {0}'.format(output),
+                          ding_dong_on=self.settings().get("pollings.farm.ding-dong-on", False))
 
     def stop(self):
         pass
+
+
+class HeartbeatThread(threading.Thread):
+
+    def __init__(self, settings: Settings):
+        self.settings = settings
+        self.logger = logging.root
+        super().__init__()
+
+    def run(self) -> None:
+        interval = self.settings().get("pollings.heartbeat.interval", 1)
+        api = self.settings().get("pollings.heartbeat.api", "https://api.gimro.ru/dummybeat")
+        token = self.settings().get("pollings.heartbeat.token", "test")
+        try:
+            while True:
+                self.__beat(api, token)
+                time.sleep(60 * interval)
+        finally:
+            pass
+
+    def stop(self):
+        pass
+
+    def __beat(self, api: str, token: str):
+        url = "{0}?token={1}".format(api, token)
+        try:
+            r = requests.get(url=url)
+            if r.status_code != 200:
+                self.logger.error(r.text)
+            else:
+                self.logger.info(r.text)
+        except Exception as e:
+            self.logger.error(e)

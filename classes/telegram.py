@@ -14,9 +14,8 @@ class Telebot:
         self.decorator = decorator
         self.logger = logging.root
         self.trying_count = self.settings.get("telebot.send_trying_count", 1)
-        self.din_din_on = self.settings.get("telebot.ding-dong-on", False)
 
-    def send(self, text: str, is_error: bool = False, trying: int = 0):
+    def send(self, text: str, is_error: bool = False, trying: int = 0, ding_dong_on: bool = True):
         token = self.settings.get("telebot.api-key")
         bot_id = self.settings.get("telebot.bot_id")
         url = "https://api.telegram.org/bot"
@@ -32,15 +31,16 @@ class Telebot:
                 "chat_id": channel_id,
                 "text": ("#{0} ".format(bot_id) if bot_id else "") + msg,
                 "parse_mode": "HTML",
-                "disable_notification": not self.din_din_on
+                "disable_notification": not ding_dong_on
             })
+            if r.status_code != 200:
+                self.logger.error(r.text)
+                self.logger.info(msg)
         except Exception as e:
             self.logger.error(e)
             if trying < self.trying_count:
                 time.sleep(5)
-                self.logger.info('Trying #2')
+                self.logger.info('Trying #{0} ...'.format(trying + 1))
                 self.send(str, is_error, trying + 1)
 
-        if r.status_code != 200:
-            self.logger.error(r.text)
-            self.logger.info(msg)
+

@@ -3,7 +3,6 @@ telebot:
   channel: "@<YourChannelName>"
   send_trying_count: 1
   bot_id: "farmer1"
-  ding-dong-on: false
 achi:
   config:
     path: /home/$USER/.achi/mainnet/config/config.yaml
@@ -40,9 +39,18 @@ logs:
 pollings:
   log:
     is-on: true
+    ding-dong-on: false
   farm:
     is-on: true
+    ding-dong-on: false
   plots:
     is-on: true
+    ding-dong-on: false
   wallet:
     is-on: true
+    ding-dong-on: true
+  heartbeat:
+    is-on: false
+    api: "<specify your url>"
+    token: "<specify your token>"
+    interval: 1 #minutes
