@@ -58,7 +58,7 @@ class Counter:
             _file = open(file_name, 'r')
             try:
                 _file.seek(0)
-                values = json.load(str(_file.read(-1)))
+                values = json.load(_file.read(-1))
             except Exception as err:
                 self.logger.error("Error: {0}".format(err))
             finally:
