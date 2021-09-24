@@ -56,7 +56,7 @@ class PlotsPollingThread(threading.Thread):
     def run(self) -> None:
         counter = Counter('plot_count.ext.val')
         paths = self.settings().get("harvester.plot_directories") or self.settings().get("plots.paths")
-        interval = float(self.settings().get("pollings.plots.interval", 60))
+        interval = float(self.settings().get("pollings.plots.interval", 1))
         info = "$plot$ Total count: {0} plot(s)\nTotal plots size: {2:.3f} TiB\nSummary:\n{1}"
         try:
             while True:
