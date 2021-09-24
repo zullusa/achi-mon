@@ -28,6 +28,20 @@ def write_value_to_file(file_path, value):
         _file.close()
 
 
+def read_value_from_file(file_path) -> float:
+    value = 0.0
+    if os.path.isfile(file_path):
+        _file = open(file_path, 'r')
+        try:
+            _file.seek(0)
+            value = float(_file.read(-1).strip())
+        except Exception as err:
+            logging.root.error("Error: {0}".format(err))
+        finally:
+            _file.close()
+    return value
+
+
 class PlotsPollingThread(threading.Thread):
 
     def __init__(self, settings: Settings):
