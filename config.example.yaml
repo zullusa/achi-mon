@@ -15,8 +15,6 @@ farm:
   summary:
     command: "path_to/achi-blockchain/get_farm_summary.sh"
     interval: 22 #minutes
-plots:
-  interval: 1 #minutes
 logs:
   logfile: "/var/log/achi/log.log"
   filters:
@@ -46,6 +44,7 @@ pollings:
   plots:
     is-on: true
     ding-dong-on: false
+    interval: 1 #minutes
   wallet:
     is-on: true
     ding-dong-on: true

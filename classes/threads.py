@@ -8,22 +8,14 @@ import requests
 from sh import Command
 from watchdog.observers import Observer
 
+from classes import plots
 from classes.decorator import Decorator
 from classes.filter import Filter
+from classes.plots import Counter
 from classes.poster import Poster
 from classes.processor import Processor
 from classes.settings import Settings
 from classes.telegram import Telebot
-
-
-def count_plots(path):
-    count = 0
-    size = 0
-    for name in os.listdir(path):
-        if os.path.isfile(os.path.join(path, name)) and name.endswith(".plot"):
-            count += 1
-            size += os.path.getsize(os.path.join(path, name))
-    return count, size
 
 
 def write_value_to_file(file_path, value):
@@ -36,50 +28,40 @@ def write_value_to_file(file_path, value):
         _file.close()
 
 
-def read_value_from_file(file_path) -> float:
-    value = 0.0
-    if os.path.isfile(file_path):
-        _file = open(file_path, 'r')
-        try:
-            _file.seek(0)
-            value = float(_file.read(-1).strip())
-        except Exception as err:
-            logging.root.error("Error: {0}".format(err))
-        finally:
-            _file.close()
-    return value
-
-
 class PlotsPollingThread(threading.Thread):
 
     def __init__(self, settings: Settings):
         self.settings = settings
-        self.decorator = Decorator().pre_tags("#plots").embrace_pre().mark_numbers().set_emoji({"plot": u'\U0001F4E6'})
+        self.decorator = Decorator().pre_tags("#plots"). \
+            embrace_pre().mark_numbers(). \
+            set_emoji({"plot": u'\U0001F4E6', "plus": u'\U00002795'})
         self.telebot = Telebot(self.settings, self.decorator)
         self.logger = logging.root
         super().__init__()
 
     def run(self) -> None:
+        counter = Counter('plot_count.ext.val')
         paths = self.settings().get("harvester.plot_directories") or self.settings().get("plots.paths")
-        interval = float(self.settings().get("plots.interval")
-                         if self.settings().get("plots.interval") else 60)
+        interval = float(self.settings().get("pollings.plots.interval", 60))
         info = "$plot$ Total count: {0} plot(s)\nTotal plots size: {2:.3f} TiB\nSummary:\n{1}"
-
         try:
             while True:
-                count_from_file = read_value_from_file('plot_count.val')
                 total_count = 0
                 total_size = 0
-                txt = " - {0} - {1} plot(s) ( {2:.3f} GiB )\n"
-                total = ""
+                path_txt = " {3}{0} - {1} plot(s) ( {2:.3f} GiB )\n"
+                total_txt = ""
                 for plots_path in paths:
-                    val, size = count_plots(plots_path)
-                    total_count += val
+                    count, size = plots.count_plots(plots_path)
+                    if counter.is_different(plots_path, count):
+                        bullet = '$plus$'
+                    else:
+                        bullet = '- '
+                    total_count += count
                     total_size += size
-                    total += txt.format(plots_path, val, size / (1024 ** 3))
-                if total_count != count_from_file:
-                    self.__send_msg(info.format(total_count, total, total_size / (1024 ** 4)))
-                    write_value_to_file('plot_count.val', total_count)
+                    total_txt += path_txt.format(plots_path, count, size / (1024 ** 3), bullet)
+                if counter.is_different_total(total_count):
+                    self.__send_msg(info.format(total_count, total_txt, total_size / (1024 ** 4)))
+                    counter.save()
                 time.sleep(60 * interval)
         finally:
             pass
