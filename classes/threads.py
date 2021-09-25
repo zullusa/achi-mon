@@ -130,7 +130,7 @@ class WalletPollingThread(threading.Thread):
                 exp_time = (time.time() - prev_time) / 60
                 self.telebot.send("$wallet$ {0}-----------------\n{1}\n\U0000231B Expected time: {2:.2f} min"
                                   .format(output, growing, exp_time),
-                                  ding_dong_on=self.settings().get("pollings.wallet.ding-dong-on", False))
+                                  ding_dong_on=self.settings().get("pollings.wallet.ding-dong-on", False), pin=True)
         return new_val
 
     def stop(self):
