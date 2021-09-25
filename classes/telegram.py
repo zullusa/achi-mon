@@ -1,4 +1,3 @@
-import json
 import logging
 import time
 
@@ -39,7 +38,7 @@ class Telebot:
                 self.logger.info(msg)
             else:
                 if pin:
-                    message_id = json.loads(r.json())['result']['message_id']
+                    message_id = r.json()['result']['message_id']
                     print('Message ID', message_id)
                     r = requests.post(url + '/pinChatMessage', data={
                         "chat_id": channel_id,
