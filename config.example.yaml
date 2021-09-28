@@ -19,6 +19,7 @@ logs:
   logfile: "/var/log/achi/log.log"
   filters:
     messages:
+      - '^INFO:.*'
       - '^Phase \d+ took.*$'
       - '^Total plot creation time was.*$'
       - '^Started copy to.*$'
@@ -28,7 +29,6 @@ logs:
       - '^Working Directory:.*$'
       - '^Working Directory 2:.*$'
       - '^Copy to.*finished.*$'
-      - '^INFO:.*'
     errors:
       - '^Killed$'
       - '^.*(E|e)rror.*$'

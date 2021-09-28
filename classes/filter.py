@@ -13,5 +13,6 @@ class Filter:
         for pattern in patterns:
             match = re.search(pattern, msg, flags=re.MULTILINE)
             if match:
-                result += '${0}$ '.format(msg_type) + match[0] + "\n"
+                for m in match:
+                    result += '${0}$ '.format(msg_type) + m + "\n"
         return result
