@@ -11,7 +11,7 @@ class Filter:
         patterns = self.settings[filter_name]
         result = ""
         for pattern in patterns:
-            match = re.search(pattern, msg, flags=re.MULTILINE)
+            match = re.findall(pattern, msg, flags=re.MULTILINE)
             if match:
                 for m in match:
                     result += "${0}$ {1}\n".format(msg_type, m)
