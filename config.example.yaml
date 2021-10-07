@@ -7,7 +7,6 @@ achi:
   config:
     path: /home/$USER/.achi/mainnet/config/config.yaml
 my_wallet:
-  interval: 20 #minutes
   command: "path_to/achi-blockchain/get_wallet_info.sh"
   fingerprints:
     - '<your wallet fingerprint>'
@@ -31,10 +30,11 @@ logs:
       - '^Copy to.*finished.*$'
     errors:
       - '^Killed$'
-      - '^.*(E|e)rror.*$'
-      - '^.*(E|e)xception.*$'
-      - '^.*(F|f)ail.*$'
+      - '^.*[E,e]rror.*$'
+      - '^.*[E,e]xception.*$'
+      - '^.*[F,f]ail.*$'
 pollings:
+  log_level: ERROR
   log:
     is-on: true
     ding-dong-on: false
@@ -48,6 +48,10 @@ pollings:
   wallet:
     is-on: true
     ding-dong-on: true
+    cron: "* * * * *"
+    command: "path_to/achi-blockchain/get_wallet_info.sh"
+    fingerprints:
+      - '<your wallet fingerprint>'
   heartbeat:
     is-on: false
     api: "<specify your url>"

@@ -3,3 +3,4 @@ python-telegram-bot
 bestconfig~=1.3.5
 requests~=2.26.0
 sh~=1.14.2
+apscheduler~=3.8.0

@@ -1,17 +1,26 @@
 import logging
 import time
 
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
+
 from classes.decorator import Decorator
+from classes.polls import BasePoller, WalletPolling
 from classes.settings import Settings
 from classes.telegram import Telebot
-from classes.threads import PlotsPollingThread, WalletPollingThread, LogPollingThread, FarmPollingThread, \
+from classes.threads import PlotsPollingThread, LogPollingThread, FarmPollingThread, \
     HeartbeatThread
 
+
+def poll(poller: BasePoller):
+    poller.poll()
+
+
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO,
+    settings = Settings()
+    logging.basicConfig(level=logging.getLevelName(settings().get('pollings.log_level', 'WARN')),
                         format='%(asctime)s - %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S')
-    settings = Settings()
     settings = Settings(settings().get("achi.config.path")) if settings().get("achi.config.path") else settings
     decorator = Decorator().pre_tags("#hi").embrace_pre()
     telebot = Telebot(settings, decorator)
@@ -24,8 +33,9 @@ if __name__ == "__main__":
     log_polling = LogPollingThread(settings)
     farm_polling = FarmPollingThread(settings)
     plots_polling = PlotsPollingThread(settings)
-    wallet_polling = WalletPollingThread(settings)
     heartbeat = HeartbeatThread(settings)
+
+    scheduler = BackgroundScheduler()
 
     if log_polling_switcher:
         log_polling.start()
@@ -37,13 +47,17 @@ if __name__ == "__main__":
     if plots_polling_switcher:
         time.sleep(17)
         plots_polling.start()
-    if wallet_polling_switcher:
-        time.sleep(21)
-        wallet_polling.start()
 
+    if wallet_polling_switcher:
+        wallet_polling = WalletPolling(settings)
+        cron_trigger = CronTrigger.from_crontab(settings().get("pollings.wallet.cron", '* * * * *'), 'Europe/Moscow')
+        scheduler.add_job(poll, cron_trigger, args=[wallet_polling])
+    scheduler.start()
     try:
         while True:
             pass
+    except (KeyboardInterrupt, SystemExit):
+        scheduler.shutdown()
     finally:
         if heartbeat_switcher:
             heartbeat.stop()
@@ -54,9 +68,6 @@ if __name__ == "__main__":
         if plots_polling_switcher:
             plots_polling.stop()
             plots_polling.join()
-        if wallet_polling_switcher:
-            wallet_polling.stop()
-            wallet_polling.join()
         if farm_polling_switcher:
             farm_polling.stop()
             farm_polling.join()
