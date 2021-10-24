@@ -20,24 +20,19 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 cd "$DIR"
 . ./activate
 achi wallet show -f $1
+echo -----------------
+achi farm summary | grep -P -e "^[^N]"
+achi show -s | grep -P -e "^Current diff.*"
+achi show -c | awk '{print $1"\t"$2}' | grep -P -e "FULL_NODE" | echo Nodes count: `wc -l`
 ```
 
-2. Create file get_farm_summary.sh in <path_to>/achi-blockchain/
-
-```bash
-#!/usr/bin/bash
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-cd "$DIR"
-. ./activate
-achi farm summary
-```
-3. Install certificate, if you want to use Heartbeat. I use Lets'Encrypt certificates. 
+2. Install certificate, if you want to use Heartbeat. I use Lets'Encrypt certificates. 
 Or you need cabundle.pem from yours certificate form the API Service.
 ```
 openssl x509 -in ./certs/cabundle.pem -text >> venv/lib/python<YOUR_VERSION>/site-packages/certifi/cacert.pem
 ```
 
-4. Make & Edit config
+3. Make & Edit config
 
 ```bash
 cp config.example.yaml config.yaml
@@ -49,7 +44,7 @@ change
 - $USER - your user name
 - path_to - Path to achi-blockchain directory
 
-5. Install Daemon
+4. Install Daemon
 
 ```bash
 chmod 777 ./install/*.sh
@@ -57,7 +52,7 @@ chmod 777 ./install/*.sh
 sudo ./install/02_install_from_root.sh
 ```
 
-6. Pro(o)fit!
+5. Pro(o)fit!
 
 # FAQ
 ### Where can I find you?
