@@ -1,5 +1,7 @@
 # achi-mon
 
+Use this to monitor farm with telegram.
+
 0. Preinstall
 
 ```bash
