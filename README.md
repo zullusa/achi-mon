@@ -14,7 +14,7 @@ pip install -r requirements.txt
 echo 149.154.167.220 api.telegram.org | sudo tee -a /etc/hosts
 ```
 
-1. Create file get_wallet_info.sh in <path_to>/achi-blockchain/ with content and make executable `chmod ugo+x get_wallet_info.sh`
+1. Create file get_wallet_info.sh in <path_to>/achi-blockchain/ with content below and make executable `chmod ugo+x get_wallet_info.sh`
 ```bash
 #!/usr/bin/bash
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
