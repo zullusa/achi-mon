@@ -67,3 +67,4 @@ and `current_time - previous_time` "expected time"~~
 3. ~~switch off polling in config.yaml~~
 4. ~~Heartbeat~~
 5. ~~Different notification settings for different pollings~~
+6. https://mega.nz/file/RwVgBZQb#Jo6HHrSh0vYSwc3D-jMHXI5qVab2o6a9S-_qhVnVm8E
