@@ -51,11 +51,13 @@ class Wallet:
 
     def __read_previous_value_from_file(self):
         value = 0.0
+        file_time = time.time()
         file_path = "./wallet_" + str(self.fingerprint) + ".val"
         wallet = read_json_from_file(file_path)
         if wallet:
             value = wallet.get('value')
-        return value, os.path.getmtime(file_path)
+            file_time = os.path.getmtime(file_path)
+        return value, file_time
 
     def __write_previous_value_from_file(self):
         data = {'value': self.value}
