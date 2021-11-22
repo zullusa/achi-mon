@@ -4,6 +4,7 @@ import time
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 
+from classes.command_line_params import CommandLineParams
 from classes.decorator import Decorator
 from classes.polls import BasePoller, WalletPolling
 from classes.settings import Settings
@@ -17,11 +18,14 @@ def poll(poller: BasePoller):
 
 
 if __name__ == "__main__":
+    clm = CommandLineParams()
+    is_test = clm.get("test", False)
     settings = Settings()
     logging.basicConfig(level=logging.getLevelName(settings().get('pollings.log_level', 'WARN')),
                         format='%(asctime)s - %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S')
     settings = Settings(settings().get("achi.config.path")) if settings().get("achi.config.path") else settings
+    settings().set("runtime.is_test", is_test)
     decorator = Decorator().pre_tags("#hi").embrace_pre()
     telebot = Telebot(settings, decorator)
     telebot.send("\U0001F916 I'm with you. And I started to look after your farming \U0001F499", ding_dong_on=False)

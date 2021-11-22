@@ -20,6 +20,7 @@ class Processor:
         telegram_msg = self.filter.apply(msg, "logs.filters.messages", "msg")
         telegram_err = self.filter.apply(msg, "logs.filters.errors", "error")
         if telegram_msg:
-            self.telebot.send(telegram_msg.strip(), ding_dong_on=self.settings().get("pollings.log.ding-dong-on", False))
+            self.telebot.send(telegram_msg.strip(), ding_dong_on=self.settings().get("pollings.log.ding-dong-on",
+                                                                                     False))
         if telegram_err:
             self.telebot.send(telegram_err.strip(), is_error=True, ding_dong_on=True)

@@ -16,6 +16,8 @@ class Telebot:
         self.trying_count = self.settings.get("telebot.send_trying_count", 1)
 
     def send(self, text: str, is_error: bool = False, trying: int = 0, ding_dong_on: bool = True, pin: bool = False):
+        if self.settings.get("runtime.is_test"):
+            return
         token = self.settings.get("telebot.api-key")
         bot_id = self.settings.get("telebot.bot_id")
         url = "https://api.telegram.org/bot"
