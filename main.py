@@ -6,10 +6,10 @@ from apscheduler.triggers.cron import CronTrigger
 
 from classes.command_line_params import CommandLineParams
 from classes.decorator import Decorator
-from classes.polls import BasePoller, WalletPolling
+from classes.polls import BasePoller, WalletPolling, FarmPolling
 from classes.settings import Settings
 from classes.telegram import Telebot
-from classes.threads import PlotsPollingThread, LogPollingThread, FarmPollingThread, \
+from classes.threads import PlotsPollingThread, LogPollingThread, \
     HeartbeatThread
 
 
@@ -35,7 +35,6 @@ if __name__ == "__main__":
     wallet_polling_switcher = settings().get("pollings.wallet.is-on", True)
     heartbeat_switcher = settings().get("pollings.heartbeat.is-on", False)
     log_polling = LogPollingThread(settings)
-    farm_polling = FarmPollingThread(settings)
     plots_polling = PlotsPollingThread(settings)
     heartbeat = HeartbeatThread(settings)
 
@@ -45,17 +44,20 @@ if __name__ == "__main__":
         log_polling.start()
     if heartbeat_switcher:
         heartbeat.start()
-    if farm_polling_switcher:
-        time.sleep(13)
-        farm_polling.start()
-    if plots_polling_switcher:
-        time.sleep(17)
-        plots_polling.start()
 
     if wallet_polling_switcher:
         wallet_polling = WalletPolling(settings)
         cron_trigger = CronTrigger.from_crontab(settings().get("pollings.wallet.cron", '* * * * *'), 'Europe/Moscow')
         scheduler.add_job(poll, cron_trigger, args=[wallet_polling])
+    if farm_polling_switcher:
+        farm_polling = FarmPolling(settings)
+        cron_trigger = CronTrigger.from_crontab(settings().get("pollings.farm.cron", '* * * * *'), 'Europe/Moscow')
+        scheduler.add_job(poll, cron_trigger, args=[farm_polling])
+
+    if plots_polling_switcher:
+        time.sleep(17)
+        plots_polling.start()
+
     scheduler.start()
     try:
         while True:
@@ -72,6 +74,3 @@ if __name__ == "__main__":
         if plots_polling_switcher:
             plots_polling.stop()
             plots_polling.join()
-        if farm_polling_switcher:
-            farm_polling.stop()
-            farm_polling.join()

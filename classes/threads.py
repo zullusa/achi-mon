@@ -4,7 +4,6 @@ import threading
 import time
 
 import requests
-from sh import Command
 from watchdog.observers import Observer
 
 from classes import plots
@@ -90,35 +89,6 @@ class LogPollingThread(threading.Thread):
         finally:
             observer.stop()
             observer.join()
-
-    def stop(self):
-        pass
-
-
-class FarmPollingThread(threading.Thread):
-    def __init__(self, settings: Settings):
-        self.settings = settings
-        self.decorator = Decorator().pre_tags("#farm").embrace_pre().mark_numbers().set_emoji(
-            {"summary": u'\U0001F4CA'})
-        self.telebot = Telebot(self.settings, self.decorator)
-        self.logger = logging.root
-        super().__init__()
-
-    def run(self) -> None:
-        interval = self.settings().get("farm.summary.interval")
-        try:
-            while True:
-                self.send_farm_summary()
-                time.sleep(60 * interval)
-        finally:
-            pass
-
-    def send_farm_summary(self):
-        cmd = Command(self.settings().get("farm.summary.command"))
-        output = cmd().stdout.decode(encoding='utf-8')
-        self.logger.info(output)
-        self.telebot.send('$summary$ {0}'.format(output),
-                          ding_dong_on=self.settings().get("pollings.farm.ding-dong-on", False))
 
     def stop(self):
         pass

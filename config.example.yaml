@@ -41,6 +41,8 @@ pollings:
   farm:
     is-on: true
     ding-dong-on: false
+    cron: "0 * * * *"
+    command: "/opt/achi-blockchain/get_farm_summary.sh"
   plots:
     is-on: true
     ding-dong-on: false

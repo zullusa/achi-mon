@@ -1,6 +1,8 @@
 import logging
 import time
 
+from sh import Command
+
 from classes.decorator import Decorator
 from classes.settings import Settings
 from classes.telegram import Telebot
@@ -40,3 +42,31 @@ class WalletPolling(BasePoller):
         message = f'$wallet$ {wallet.text}-----------------\n{growing}\n\U0000231B Expected time: {exp_time} min'
         self.logger.info(message)
         self.telebot.send(message, ding_dong_on=self.settings().get("pollings.wallet.ding-dong-on", False), pin=True)
+
+
+class FarmPolling(BasePoller):
+    def __init__(self, settings: Settings):
+        self.settings = settings
+        self.decorator = Decorator().pre_tags("#farm").embrace_pre().mark_numbers().set_emoji(
+            {"summary": u'\U0001F4CA'})
+        self.telebot = Telebot(self.settings, self.decorator)
+        self.logger = logging.root
+        super().__init__()
+
+    def poll(self):
+        try:
+            self.send_farm_summary()
+        except Exception as e:
+            self.logger.error(e)
+        finally:
+            pass
+
+    def send_farm_summary(self):
+        cmd = Command(self.settings().get("pollings.farm.command",
+                                          self.settings().get("farm.summary.command",
+                                                              "/opt/achi-blockchain/get_farm_summary.sh")))
+        output = cmd().stdout.decode(encoding='utf-8')
+        self.logger.info(output)
+        self.telebot.send('$summary$ {0}'.format(output),
+                          ding_dong_on=self.settings().get("pollings.farm.ding-dong-on", False))
+
