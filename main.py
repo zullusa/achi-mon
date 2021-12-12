@@ -6,7 +6,7 @@ from apscheduler.triggers.cron import CronTrigger
 
 from classes.command_line_params import CommandLineParams
 from classes.decorator import Decorator
-from classes.polls import BasePoller, WalletPolling, FarmPolling
+from classes.polls import BasePoller, WalletPolling, FarmPolling, DiskspacePolling
 from classes.settings import Settings
 from classes.telegram import Telebot
 from classes.threads import PlotsPollingThread, LogPollingThread, \
@@ -34,6 +34,7 @@ if __name__ == "__main__":
     plots_polling_switcher = settings().get("pollings.plots.is-on", True)
     wallet_polling_switcher = settings().get("pollings.wallet.is-on", True)
     heartbeat_switcher = settings().get("pollings.heartbeat.is-on", False)
+    diskspace_switcher = settings().get("pollings.diskspace.is-on", False)
     log_polling = LogPollingThread(settings)
     plots_polling = PlotsPollingThread(settings)
     heartbeat = HeartbeatThread(settings)
@@ -53,9 +54,12 @@ if __name__ == "__main__":
         farm_polling = FarmPolling(settings)
         cron_trigger = CronTrigger.from_crontab(settings().get("pollings.farm.cron", '* * * * *'), 'Europe/Moscow')
         scheduler.add_job(poll, cron_trigger, args=[farm_polling])
+    if diskspace_switcher:
+        diskspace_polling = DiskspacePolling(settings)
+        cron_trigger = CronTrigger.from_crontab(settings().get("pollings.diskspace.cron", '* * * * *'), 'Europe/Moscow')
+        scheduler.add_job(poll, cron_trigger, args=[diskspace_polling])
 
     if plots_polling_switcher:
-        time.sleep(17)
         plots_polling.start()
 
     scheduler.start()

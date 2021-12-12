@@ -1,4 +1,5 @@
 import logging
+import shutil
 import time
 
 from sh import Command
@@ -69,4 +70,39 @@ class FarmPolling(BasePoller):
         self.logger.info(output)
         self.telebot.send('$summary$ {0}'.format(output),
                           ding_dong_on=self.settings().get("pollings.farm.ding-dong-on", False))
+
+
+class DiskspacePolling(BasePoller):
+    def __init__(self, settings: Settings):
+        self.settings = settings
+        self.decorator = Decorator().pre_tags("#diskusage").embrace_pre().mark_numbers().set_emoji(
+            {"disk": u'\U0001F4BE'})
+        self.telebot = Telebot(self.settings, self.decorator)
+        self.logger = logging.root
+        super().__init__()
+
+    def poll(self):
+        try:
+            self.check_disks()
+        except Exception as e:
+            self.logger.error(e)
+        finally:
+            pass
+
+    def check_disks(self):
+        gb = 1024 * 1024 * 1024
+        disks = self.settings().get("pollings.diskspace.disks", ('/', '/home'))
+        threshold = self.settings().get("pollings.diskspace.alert-threshold", 10)
+        for disk in disks:
+            t, u, f = shutil.disk_usage(disk)
+            if ((f / t) * 100.0) <= threshold:
+                text = "Disk mounted on '{0}'" \
+                       "\n\thas insufficient space (less {4}%):" \
+                       "\n\t\tTotal:\t{1:.2f} GiB," \
+                       "\n\t\tUsage:\t{2:.2f} GiB," \
+                       "\n\t\tFree:\t{3:.2f} GiB".format(disk, t/gb, u/gb, f/gb, threshold)
+                self.logger.info(text)
+                self.telebot.send('$disk$ {0}'.format(text),
+                                  ding_dong_on=self.settings().get("pollings.diskspace.ding-dong-on", False))
+
 

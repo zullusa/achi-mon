@@ -59,3 +59,11 @@ pollings:
     api: "<specify your url>"
     token: "<specify your token>"
     interval: 1 #minutes
+  diskspace:
+    is-on: false
+    ding-dong-on: false
+    cron: "* * * * *"
+    alert-threshold: 10 #percents
+    disks:
+      - "/"
+      - "/home"
