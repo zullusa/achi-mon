@@ -62,6 +62,7 @@ if __name__ == "__main__":
     if plots_polling_switcher:
         plots_polling.start()
 
+    time.sleep(120)
     scheduler.start()
     try:
         while True:
