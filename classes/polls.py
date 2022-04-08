@@ -35,12 +35,13 @@ class WalletPolling(BasePoller):
     def __send_wallet_info(self, wallet: Wallet):
         if wallet.value == wallet.prev:
             return
-        delta = wallet.value - wallet.prev
-        growing = "\U0001F331 Growing: + {0:.4f} xach".format(delta) \
-            if delta > 0 \
-            else "\U0001F342 Fading: - {0:.4f} xach".format(abs(delta))
+        d = wallet.value - wallet.prev
+        delta = "{0:,.4f}".format(abs(d)).replace(',', ' ')
+        changing = "\U0001F331 Growing: + {0} ach".format(delta) \
+            if d > 0 \
+            else "\U0001F342 Fading: - {0} ach".format(delta)
         exp_time = round((time.time() - wallet.prev_time) / 60)
-        message = f'$wallet$ {wallet.text}-----------------\n{growing}\n\U0000231B Expected time: {exp_time} min'
+        message = f'$wallet$ {wallet.text}-----------------\n{changing}\n\U0000231B Expected time: {exp_time} min'
         self.logger.info(message)
         self.telebot.send(message, ding_dong_on=self.settings().get("pollings.wallet.ding-dong-on", False), pin=True)
 
