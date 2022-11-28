@@ -6,6 +6,7 @@ config.yaml
 start_monitor.sh
 wallet_*.val
 plot_count.val
+plot_count.ext.val
 log
 # Byte-compiled / optimized / DLL files
 __pycache__/
