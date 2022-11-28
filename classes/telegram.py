@@ -52,6 +52,6 @@ class Telebot:
             if trying < self.trying_count:
                 time.sleep(5)
                 self.logger.info('Trying #{0} ...'.format(trying + 1))
-                self.send(str, is_error, trying + 1)
+                self.send(msg, is_error, trying + 1)
 
 
