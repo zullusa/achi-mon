@@ -26,9 +26,9 @@ if __name__ == "__main__":
                         datefmt='%Y-%m-%d %H:%M:%S')
     settings = Settings(settings().get("achi.config.path")) if settings().get("achi.config.path") else settings
     settings().set("runtime.is_test", is_test)
-    decorator = Decorator().pre_tags("#hi").embrace_pre()
+    decorator = Decorator().pre_tags("#achiHi").embrace_pre()
     telebot = Telebot(settings, decorator)
-    telebot.send("\U0001F916 I'm with you. And I started to look after your farming \U0001F499", ding_dong_on=False)
+    telebot.send("\U0001F916 I'm with you. And I started to look after your Achi farming \U0001F499", ding_dong_on=False)
     log_polling_switcher = settings().get("pollings.log.is-on", True)
     farm_polling_switcher = settings().get("pollings.farm.is-on", True)
     plots_polling_switcher = settings().get("pollings.plots.is-on", True)

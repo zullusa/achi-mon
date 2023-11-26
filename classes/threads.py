@@ -20,7 +20,7 @@ class PlotsPollingThread(threading.Thread):
 
     def __init__(self, settings: Settings):
         self.settings = settings
-        self.decorator = Decorator().pre_tags("#plots"). \
+        self.decorator = Decorator().pre_tags("#achiPlots"). \
             embrace_pre().mark_numbers(). \
             set_emoji({"plot": u'\U0001F4E6', "plus": u'\U00002795'})
         self.telebot = Telebot(self.settings, self.decorator)
@@ -72,7 +72,7 @@ class LogPollingThread(threading.Thread):
         poster = Poster(self.settings)
         decorator = Decorator() \
             .embrace_pre() \
-            .pre_tags("#log") \
+            .pre_tags("#achiLog") \
             .mark_numbers() \
             .set_emoji({'msg': u'\U0001F40C', 'error': u'\U0000203C'})
         telebot = Telebot(self.settings, decorator)

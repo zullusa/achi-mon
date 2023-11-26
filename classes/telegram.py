@@ -31,7 +31,7 @@ class Telebot:
             r = requests.post(url + '/sendMessage', data={
                 "chat_id": channel_id,
                 "text": ("#{0} ".format(bot_id) if bot_id else "") + msg,
-                "parse_mode": "HTML",
+                "parse_mode": "Markdown",
                 "disable_notification": not ding_dong_on
             })
 

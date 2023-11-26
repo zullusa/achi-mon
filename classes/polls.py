@@ -18,7 +18,7 @@ class BasePoller:
 class WalletPolling(BasePoller):
     def __init__(self, settings: Settings):
         self.settings = settings
-        self.decorator = Decorator().pre_tags("#wallet").embrace_pre().mark_numbers().set_emoji(
+        self.decorator = Decorator().pre_tags("#achiWallet").embrace_pre().mark_numbers().set_emoji(
             {"wallet": u'\U0001F4B0'})
         self.telebot = Telebot(self.settings, self.decorator)
         self.logger = logging.root
@@ -43,13 +43,13 @@ class WalletPolling(BasePoller):
         exp_time = round((time.time() - wallet.prev_time) / 60)
         message = f'$wallet$ {wallet.text}-----------------\n{changing}\n\U0000231B Expected time: {exp_time} min'
         self.logger.info(message)
-        self.telebot.send(message, ding_dong_on=self.settings().get("pollings.wallet.ding-dong-on", False), pin=True)
+        self.telebot.send(message, ding_dong_on=self.settings().get("pollings.wallet.ding-dong-on", False), pin=False)
 
 
 class FarmPolling(BasePoller):
     def __init__(self, settings: Settings):
         self.settings = settings
-        self.decorator = Decorator().pre_tags("#farm").embrace_pre().mark_numbers().set_emoji(
+        self.decorator = Decorator().pre_tags("#achiFarm").embrace_pre().mark_numbers().set_emoji(
             {"summary": u'\U0001F4CA'})
         self.telebot = Telebot(self.settings, self.decorator)
         self.logger = logging.root
@@ -76,7 +76,7 @@ class FarmPolling(BasePoller):
 class DiskspacePolling(BasePoller):
     def __init__(self, settings: Settings):
         self.settings = settings
-        self.decorator = Decorator().pre_tags("#diskusage").embrace_pre().mark_numbers().set_emoji(
+        self.decorator = Decorator().pre_tags("#achiDiskUsage").embrace_pre().mark_numbers().set_emoji(
             {"disk": u'\U0001F4BE'})
         self.telebot = Telebot(self.settings, self.decorator)
         self.logger = logging.root

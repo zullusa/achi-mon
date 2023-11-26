@@ -30,7 +30,7 @@ class Decorator:
     def format_text(self, text, supply_tags: str = ''):
         self.__set_text(text)
         if self.need_pre and not self.need_mark_numbers:
-            self.formatted_text = '<pre>' + self.formatted_text + '</pre>'
+            self.formatted_text = '`' + self.formatted_text + '`'
         elif self.need_pre and self.need_mark_numbers:
             self.__make_numbers_with_pre()
         elif not self.need_pre and self.need_mark_numbers:
@@ -50,9 +50,9 @@ class Decorator:
         if match:
             for m in match:
                 if m not in already:
-                    txt = txt.replace(m, "</pre><strong>{0}</strong><pre>".format(m))
+                    txt = txt.replace(m, " `*{0}*` ".format(m))
                     already.append(m)
-        self.formatted_text = '<pre>' + txt + '</pre>'
+        self.formatted_text = '`' + txt + '`'
 
     def __make_numbers(self):
         txt = self.text
@@ -61,7 +61,7 @@ class Decorator:
         if match:
             for m in match:
                 if m not in already:
-                    txt = txt.replace(m, " <strong>{0}</strong> ".format(m))
+                    txt = txt.replace(m, "*{0}*".format(m))
                     already.append(m)
         self.formatted_text = txt
 
